@@ -700,7 +700,7 @@ class corosync(
       owner        => 'root',
       group        => 'root',
       content      => template("${module_name}/corosync.conf.erb"),
-      validate_cmd => '/usr/bin/env COROSYNC_MAIN_CONFIG_FILE=% /usr/sbin/corosync -t',
+      validate_cmd => $test_corosync_config_cmd,
       require      => $corosync_package_require,
     }
   } else {

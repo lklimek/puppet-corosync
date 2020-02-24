@@ -32,11 +32,18 @@ class corosync::params {
       $package_pcs    = true
       $package_fence_agents = true
       $set_votequorum = true
-      if versioncmp($::operatingsystemrelease, '7') >= 0 {
+      if versioncmp($::operatingsystemrelease, '8') >= 0 {
+        $test_corosync_config_cmd = '/usr/sbin/corosync -c % -t'
+        $manage_pacemaker_service = true
+        $test_corosync_config = true
+        $secauth_parameter_mode = '2.x'
+      } elsif versioncmp($::operatingsystemrelease, '7') >= 0 {
+        $test_corosync_config_cmd = '/usr/bin/env COROSYNC_MAIN_CONFIG_FILE=% /usr/sbin/corosync -t'
         $manage_pacemaker_service = true
         $test_corosync_config = true
         $secauth_parameter_mode = '2.x'
       } else {
+        $test_corosync_config_cmd = '/usr/bin/env COROSYNC_MAIN_CONFIG_FILE=% /usr/sbin/corosync -t'
         $manage_pacemaker_service = false
         $test_corosync_config = false
         $secauth_parameter_mode = '1.x'
@@ -48,6 +55,7 @@ class corosync::params {
       $package_crmsh  = true
       $package_pcs    = false
       $package_fence_agents = false
+      $test_corosync_config_cmd = '/usr/bin/env COROSYNC_MAIN_CONFIG_FILE=% /usr/sbin/corosync -t'
       case $::operatingsystem {
         'Ubuntu': {
           if versioncmp($::operatingsystemrelease, '14.04') >= 0 {
